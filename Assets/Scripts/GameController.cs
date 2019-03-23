@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -19,9 +20,11 @@ public class GameController : MonoBehaviour
     Text winText;
 
     [SerializeField]
-    GameObject uiObject;
+    GameObject uiObject, blueTurn, redTurn;
 
     bool moving = false;
+
+    bool gameOver = false;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +35,13 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (gameOver)
+        {
+            if (Input.GetMouseButton(0))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
     }
 
     public void ShowAvailableMoves()
@@ -112,9 +121,12 @@ public class GameController : MonoBehaviour
             return;
         }
 
+        GetComponent<AudioSource>().Play();
+
         highlight.GetComponent<Highlight>().EatUnit();
 
         activeUnit.transform.position = highlight.transform.position;
+
         FindObjectOfType<CardsManager>().SetNextCard(activeCard);
 
         activeUnit.CheckKingBlue();
@@ -130,9 +142,13 @@ public class GameController : MonoBehaviour
         if (currentTurnColor == "Blue")
         {
             currentTurnColor = "Red";
+            blueTurn.SetActive(false);
+            redTurn.SetActive(true);
         } else
         {
             currentTurnColor = "Blue";
+            redTurn.SetActive(false);
+            blueTurn.SetActive(true);
         }
 
         ClearActiveCard();
@@ -146,5 +162,6 @@ public class GameController : MonoBehaviour
         uiObject.SetActive(true);
         winText.gameObject.SetActive(true);
         winText.text = winColor + " wins!";
+        gameOver = true;
     }
 }
