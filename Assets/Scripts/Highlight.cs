@@ -4,33 +4,22 @@ using UnityEngine;
 
 public class Highlight : MonoBehaviour
 {
+    //HIGHLIGHT ATTRIBUTES
+    [Header("Highlight Attributes")]
+
+    [Tooltip("The unit to be eaten if player moves his unit to this area")]
     public Unit canEatUnit;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Eats the unit in the selected space
     public void EatUnit()
     {
+        // Checks if the highlight is on an eatable unit
         if (canEatUnit)
         {
+            // Repositions eatable unit off the board
             canEatUnit.transform.position = new Vector2(20f, 20f);
-
-            if (canEatUnit.unitColor == "Blue")
-            {
-                FindObjectOfType<TeamsManager>().BlueUnitEaten(canEatUnit);
-            } else
-            {
-                FindObjectOfType<TeamsManager>().RedUnitEaten(canEatUnit);
-            }
+            // Checks Win Condition
+            FindObjectOfType<TeamsManager>().UnitEaten(canEatUnit);
         }
     }
 }

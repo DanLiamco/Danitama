@@ -4,49 +4,36 @@ using UnityEngine;
 
 public class TeamsManager : MonoBehaviour
 {
+    // TEAMS MANAGER ATTRIBUTES
+    [Header("Teams Manager Attributes")]
+
+    [Tooltip("The Red Team units")]
     public Unit[] redTeam;
+    [Tooltip("The Blue Team units")]
     public Unit[] blueTeam;
 
-    public int redUnitsEaten = 0;
-    public int blueUnitsEaten = 0;
-
-    // Start is called before the first frame update
-    void Start()
+    // Checks win condition
+    public void UnitEaten(Unit eatenUnit)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void BlueUnitEaten(Unit eatenUnit)
-    {
-        blueUnitsEaten++;
-        if (blueUnitsEaten >= 5)
-        {
-            FindObjectOfType<GameController>().Win("Red");
-        }
-
+        // Checks if eaten unit is a King
         if (eatenUnit.isKing)
         {
-            FindObjectOfType<GameController>().Win("Red");
-        }
-    }
+            // Initializes win Color
+            string winColor;
 
-    public void RedUnitEaten(Unit eatenUnit)
-    {
-        redUnitsEaten++;
-        if (redUnitsEaten >= 5)
-        {
-            FindObjectOfType<GameController>().Win("Blue");
-        }
+            // Check if eaten unit is Blue
+            if (eatenUnit.unitColor == "Blue")
+            {
+                // Sets win color to Red
+                winColor = "Red";
+            } /* Checks if eaten unit is not Blue (usually means it is Red) */else
+            {
+                // Sets win color to Blue
+                winColor = "Blue";
+            }
 
-        if (eatenUnit.isKing)
-        {
-            FindObjectOfType<GameController>().Win("Blue");
+            // Trigger Win
+            FindObjectOfType<GameController>().Win(winColor);
         }
     }
 }
